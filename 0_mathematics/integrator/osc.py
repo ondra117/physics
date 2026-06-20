@@ -1,10 +1,11 @@
 import numpy as np
-from dataclasses import dataclass
 
 
 class OSC:
     def __init__(self, w: float, x_0: float | None = None, dx_0: float | None = None):
         self.w = w
+        self.x_0 = x_0
+        self.dx_0 = dx_0
         self.A = None
         self.B = None
 
@@ -12,7 +13,7 @@ class OSC:
             self.B = x_0 / 2 + 1j * dx_0 / (2 * w)
             self.A = x_0 - self.B
 
-    def ana_x(self, t):
+    def analytic(self, t):
         """
         x''   = -w^2x
         x(0)  = x_0
@@ -39,7 +40,30 @@ class OSC:
         A = x_0 - B
         """
 
-        assert self.A is not None and self.B is not None, "ERROR: Mising x_0, dx_0"
+        assert self.x_0 is not None and self.dx_0 is not None, "ERROR: Mising x_0, dx_0"
         return np.real(
             self.A * np.exp(1j * self.w * t) + self.B * np.exp(-1j * self.w * t)
         )
+
+    def f(self, inp):
+        """
+        x'' = -w^2x
+
+        v' = -w^2x
+        x' = v
+        """
+        x, v = inp
+        return v, -(self.w**2) * x
+
+    def euler(self, inp, dt):
+        """
+        v(t + dt) = v(t) + dt * v'
+        x(t + dt) = x(t) + dt * x'
+        """
+
+        x, v = inp
+        dx, dv = self.f(inp)
+
+        new_v = v + dt * dv
+        new_x = x + dt * dx
+        return np.array([new_x, new_v])
