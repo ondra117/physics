@@ -67,3 +67,32 @@ class OSC:
         new_v = v + dt * dv
         new_x = x + dt * dx
         return np.array([new_x, new_v])
+
+    def beckward_euler(self, inp, dt):
+        """
+        x'' = -w^2x
+
+        v' = -w^2x
+        x' = v
+
+        v(t + dt) = v(t) + dt * v'(x(t + dt))
+        x(t + dt) = x(t) + dt * x'(v(t + dt))
+        v(t + dt) = v(t) + dt * -w^2x(t + dt)
+        x(t + dt) = x(t) + dt * v(t + dt)
+
+        v(t + dt) = v(t) + dt * -w^2(x(t) + dt * v(t + dt))
+        v(t + dt) = v(t) - dt * w^2 * x(t) - dt^2 * w^2 * v(t + dt)
+        v(t + dt) + dt^2 * w^2 * v(t + dt) = v(t) - dt * w^2 * x(t)
+        v(t + dt) * (1 + dt^2 * w^2) = v(t) - dt * w^2 * x(t)
+        v(t + dt) = (v(t) - dt * w^2 * x(t)) / (1 + dt^2 * w^2)
+
+        v(t + dt) = (v(t) - dt * w^2 * x(t)) / (1 + dt^2 * w^2)
+        x(t + dt) = x(t) + dt * v(t + dt)
+        """
+
+        x, v = inp
+
+        new_v = (v - dt * self.w**2 * x) / (1 + dt**2 * self.w**2)
+        new_x = x + dt * new_v
+
+        return np.array([new_x, new_v])
