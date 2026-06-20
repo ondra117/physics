@@ -53,7 +53,7 @@ class OSC:
         x' = v
         """
         x, v = inp
-        return v, -(self.w**2) * x
+        return np.array([v, -(self.w**2) * x])
 
     def euler(self, inp, dt):
         """
@@ -96,3 +96,10 @@ class OSC:
         new_x = x + dt * new_v
 
         return np.array([new_x, new_v])
+
+    def rk4(self, inp, dt):
+        k1 = self.f(inp)
+        k2 = self.f(inp + dt / 2 * k1)
+        k3 = self.f(inp + dt / 2 * k2)
+        k4 = self.f(inp + dt * k3)
+        return inp + dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
