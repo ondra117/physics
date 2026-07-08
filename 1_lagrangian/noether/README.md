@@ -15,11 +15,12 @@ $$
 $$
 \frac{\partial L}{\partial \phi} = 0\\
 \frac{\partial L}{\partial \dot{\phi}} = m_1r^2\dot{\phi}\\
-\frac{d}{dt}\frac{\partial L}{\partial \dot{\phi}} = \frac{d}{dt}m_1r^2\dot{\phi} = m_1r^2\ddot{\phi}\\
-\frac{d}{dt}\frac{\partial L}{\partial \dot{\phi}}-\frac{\partial L}{\partial \phi} = m_1r^2\ddot{\phi}\\
-m_1r^2\ddot{\phi} = 0\\
-\ddot{\phi} = 0\\
-\dot{\phi} = konst
+\frac{d}{dt}\frac{\partial L}{\partial \dot{\phi}} = \frac{d}{dt}m_1r^2\dot{\phi}\\
+\frac{d}{dt}\frac{\partial L}{\partial \dot{\phi}}-\frac{\partial L}{\partial \phi} = \frac{d}{dt}m_1r^2\dot{\phi}\\
+\frac{d}{dt}m_1r^2\dot{\phi} = 0\\
+m_1r^2\dot{\phi} = konst\\
+\dot{\phi} = konst\\
+\ddot{\phi} = 0
 $$
 $$
 E = T + V = H = \dot{q}\frac{\partial L}{\partial \dot{q}}-L\\
