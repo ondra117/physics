@@ -25,22 +25,22 @@ $$
 L = \frac{1}{2}(m_0 + m_1)l_0^2\dot{\theta_0}^2 + \frac{1}{2}m_1l_1^2\dot{\theta_1}^2 + m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\cos(\theta_0 - \theta_1) + g(m_0 + m_1)l_0\cos(\theta_0) + gm_1l_1\cos(\theta_1)
 $$
 $$
-\frac{d}{dt}\frac{dL}{d\dot{\theta_0}}-\frac{dL}{d\theta_0}=0\\
-\frac{d}{dt}\frac{dL}{d\dot{\theta_1}}-\frac{dL}{d\theta_1}=0
+\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta_0}}-\frac{\partial L}{\partial \theta_0}=0\\
+\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta_1}}-\frac{\partial L}{\partial \theta_1}=0
 $$
 $$
-\frac{dL}{d\dot{\theta_0}} = (m_0 + m_1)l_0^2\dot{\theta_0} + m_1l_0l_1\dot{\theta_1}\cos(\theta_0 - \theta_1)\\
-\frac{dL}{d\theta_0} = -m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) - g(m_0 + m_1)l_0\sin(\theta_0)\\
-\frac{d}{dt}\frac{dL}{d\dot{\theta_0}} = \frac{d}{dt}(m_0 + m_1)l_0^2\dot{\theta_0} + m_1l_0l_1\dot{\theta_1}\cos(\theta_0 - \theta_1) = (m_0 + m_1)l_0^2\ddot{\theta_0} + m_1l_0l_1(\ddot{\theta_1}\cos(\theta_0 - \theta_1) - \dot{\theta_1}\sin(\theta_0 - \theta_1)(\dot{\theta_0} - \dot{\theta_1}))\\
-\frac{d}{dt}\frac{dL}{d\dot{\theta_0}}-\frac{dL}{d\theta_0} = (m_0 + m_1)l_0^2\ddot{\theta_0} + m_1l_0l_1(\ddot{\theta_1}\cos(\theta_0 - \theta_1) - \dot{\theta_1}\sin(\theta_0 - \theta_1)(\dot{\theta_0} - \dot{\theta_1})) + m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) + g(m_0 + m_1)l_0\sin(\theta_0) = (m_0 + m_1)l_0^2\ddot{\theta_0} + m_1l_0l_1\ddot{\theta_1}\cos(\theta_0 - \theta_1) + m_1l_0l_1\dot{\theta_1}^2\sin(\theta_0 - \theta_1) + g(m_0 + m_1)l_0\sin(\theta_0)\\
+\frac{\partial L}{\partial \dot{\theta_0}} = (m_0 + m_1)l_0^2\dot{\theta_0} + m_1l_0l_1\dot{\theta_1}\cos(\theta_0 - \theta_1)\\
+\frac{\partial L}{\partial \theta_0} = -m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) - g(m_0 + m_1)l_0\sin(\theta_0)\\
+\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta_0}} = \frac{d}{dt}(m_0 + m_1)l_0^2\dot{\theta_0} + m_1l_0l_1\dot{\theta_1}\cos(\theta_0 - \theta_1) = (m_0 + m_1)l_0^2\ddot{\theta_0} + m_1l_0l_1(\ddot{\theta_1}\cos(\theta_0 - \theta_1) - \dot{\theta_1}\sin(\theta_0 - \theta_1)(\dot{\theta_0} - \dot{\theta_1}))\\
+\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta_0}}-\frac{\partial L}{\partial \theta_0} = (m_0 + m_1)l_0^2\ddot{\theta_0} + m_1l_0l_1(\ddot{\theta_1}\cos(\theta_0 - \theta_1) - \dot{\theta_1}\sin(\theta_0 - \theta_1)(\dot{\theta_0} - \dot{\theta_1})) + m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) + g(m_0 + m_1)l_0\sin(\theta_0) = (m_0 + m_1)l_0^2\ddot{\theta_0} + m_1l_0l_1\ddot{\theta_1}\cos(\theta_0 - \theta_1) + m_1l_0l_1\dot{\theta_1}^2\sin(\theta_0 - \theta_1) + g(m_0 + m_1)l_0\sin(\theta_0)\\
 (m_0 + m_1)l_0^2\ddot{\theta_0} + m_1l_0l_1\ddot{\theta_1}\cos(\theta_0 - \theta_1) + m_1l_0l_1\dot{\theta_1}^2\sin(\theta_0 - \theta_1) + g(m_0 + m_1)l_0\sin(\theta_0) = 0\\
 (m_0 + m_1)l_0\ddot{\theta_0} + m_1l_1\ddot{\theta_1}\cos(\theta_0 - \theta_1) + m_1l_1\dot{\theta_1}^2\sin(\theta_0 - \theta_1) + g(m_0 + m_1)\sin(\theta_0) = 0
 $$
 $$
-\frac{dL}{d\dot{\theta_1}} = m_1l_1^2\dot{\theta_1} + m_1l_0l_1\dot{\theta_0}\cos(\theta_0 - \theta_1)\\
-\frac{dL}{d\theta_1} = m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) - gm_1l_1\sin(\theta_1)\\
-\frac{d}{dt}\frac{dL}{d\dot{\theta_1}} = \frac{d}{dt}m_1l_1^2\dot{\theta_1} + m_1l_0l_1\dot{\theta_0}\cos(\theta_0 - \theta_1) = m_1l_1^2\ddot{\theta_1} + m_1l_0l_1(\ddot{\theta_0}\cos(\theta_0 - \theta_1) - \dot{\theta_0}\sin(\theta_0 - \theta_1)(\dot{\theta_0} - \dot{\theta_1}))\\
-\frac{d}{dt}\frac{dL}{d\dot{\theta_1}}-\frac{dL}{d\theta_1} = m_1l_1^2\ddot{\theta_1} + m_1l_0l_1(\ddot{\theta_0}\cos(\theta_0 - \theta_1) - \dot{\theta_0}\sin(\theta_0 - \theta_1)(\dot{\theta_0} - \dot{\theta_1})) - m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) + gm_1l_1\sin(\theta_1) = m_1l_1^2\ddot{\theta_1} + m_1l_0l_1\ddot{\theta_0}\cos(\theta_0 - \theta_1) - m_1l_0l_1\dot{\theta_0}^2\sin(\theta_0 - \theta_1) + m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) - m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) + gm_1l_1\sin(\theta_1) = m_1l_1^2\ddot{\theta_1} + m_1l_0l_1\ddot{\theta_0}\cos(\theta_0 - \theta_1) - m_1l_0l_1\dot{\theta_0}^2\sin(\theta_0 - \theta_1) + gm_1l_1\sin(\theta_1)\\
+\frac{\partial L}{\partial \dot{\theta_1}} = m_1l_1^2\dot{\theta_1} + m_1l_0l_1\dot{\theta_0}\cos(\theta_0 - \theta_1)\\
+\frac{\partial L}{\partial \theta_1} = m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) - gm_1l_1\sin(\theta_1)\\
+\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta_1}} = \frac{d}{dt}m_1l_1^2\dot{\theta_1} + m_1l_0l_1\dot{\theta_0}\cos(\theta_0 - \theta_1) = m_1l_1^2\ddot{\theta_1} + m_1l_0l_1(\ddot{\theta_0}\cos(\theta_0 - \theta_1) - \dot{\theta_0}\sin(\theta_0 - \theta_1)(\dot{\theta_0} - \dot{\theta_1}))\\
+\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta_1}}-\frac{\partial L}{\partial \theta_1} = m_1l_1^2\ddot{\theta_1} + m_1l_0l_1(\ddot{\theta_0}\cos(\theta_0 - \theta_1) - \dot{\theta_0}\sin(\theta_0 - \theta_1)(\dot{\theta_0} - \dot{\theta_1})) - m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) + gm_1l_1\sin(\theta_1) = m_1l_1^2\ddot{\theta_1} + m_1l_0l_1\ddot{\theta_0}\cos(\theta_0 - \theta_1) - m_1l_0l_1\dot{\theta_0}^2\sin(\theta_0 - \theta_1) + m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) - m_1l_0l_1\dot{\theta_0}\dot{\theta_1}\sin(\theta_0 - \theta_1) + gm_1l_1\sin(\theta_1) = m_1l_1^2\ddot{\theta_1} + m_1l_0l_1\ddot{\theta_0}\cos(\theta_0 - \theta_1) - m_1l_0l_1\dot{\theta_0}^2\sin(\theta_0 - \theta_1) + gm_1l_1\sin(\theta_1)\\
 m_1l_1^2\ddot{\theta_1} + m_1l_0l_1\ddot{\theta_0}\cos(\theta_0 - \theta_1) - m_1l_0l_1\dot{\theta_0}^2\sin(\theta_0 - \theta_1) + gm_1l_1\sin(\theta_1) = 0\\
 m_1l_1\ddot{\theta_1} + m_1l_0\ddot{\theta_0}\cos(\theta_0 - \theta_1) - m_1l_0\dot{\theta_0}^2\sin(\theta_0 - \theta_1) + gm_1\sin(\theta_1) = 0
 $$
