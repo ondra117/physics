@@ -19,8 +19,6 @@ $$
 \frac{d}{dt}\frac{\partial L}{\partial \dot{\phi}}-\frac{\partial L}{\partial \phi} = \frac{d}{dt}m_1r^2\dot{\phi}\\
 \frac{d}{dt}m_1r^2\dot{\phi} = 0\\
 m_1r^2\dot{\phi} = konst\\
-\dot{\phi} = konst\\
-\ddot{\phi} = 0
 $$
 $$
 E = T + V = H = \dot{q}\frac{\partial L}{\partial \dot{q}}-L\\
