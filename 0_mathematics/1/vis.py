@@ -22,9 +22,7 @@ fig, ax = plt.subplots(figsize=(16, 8))
 
 ax.plot(analytic_t, analytic_x, "-", label="analytic")
 ax.plot(euler_t, euler_x, "-o", label="euler")
-ax.plot(
-    beckward_euler_t, beckward_euler_x, "-o", label="beckward_euler"
-)
+ax.plot(beckward_euler_t, beckward_euler_x, "-o", label="beckward_euler")
 ax.plot(rk4_t, rk4_x, "-o", label="kr4")
 
 ax.axhline(0, color="gray", lw=0.8)

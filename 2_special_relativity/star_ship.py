@@ -20,19 +20,25 @@ DTAU = YEARS_PER_SEC / FPS
 ENGINE_ACCEL = 0.02
 ROTATE_SPEED = 0.04
 
+
 def fmt_time(years):
     if years < 0:
         years = 0.0
     yrs = int(years)
     rem = (years - yrs) * 365.25
-    d = int(rem); rem = (rem - d) * 24
-    h = int(rem); rem = (rem - h) * 60
-    m = int(rem); s = int((rem - m) * 60)
+    d = int(rem)
+    rem = (rem - d) * 24
+    h = int(rem)
+    rem = (rem - h) * 60
+    m = int(rem)
+    s = int((rem - m) * 60)
     return f"{yrs:,} let  {d:03d} d  {h:02d}:{m:02d}:{s:02d}"
+
 
 # ---------- blackbody color + lookup table ----------
 def _clamp(v):
     return max(0, min(255, int(v)))
+
 
 def blackbody_color(temp):
     t = temp / 100.0
@@ -49,30 +55,45 @@ def blackbody_color(temp):
         b = 138.5177312231 * math.log(t - 10) - 305.0447927307
     return (_clamp(r), _clamp(g), _clamp(b))
 
+
 NLUT = 2048
 T_MIN, T_MAX = 500.0, 120000.0
 _LOG_MIN = math.log(T_MIN)
 _LUT_SCALE = (NLUT - 1) / (math.log(T_MAX) - _LOG_MIN)
 COLOR_LUT = np.array(
-    [blackbody_color(math.exp(_LOG_MIN + i / (NLUT - 1) * (math.log(T_MAX) - _LOG_MIN)))
-     for i in range(NLUT)], dtype=np.uint8)
+    [
+        blackbody_color(
+            math.exp(_LOG_MIN + i / (NLUT - 1) * (math.log(T_MAX) - _LOG_MIN))
+        )
+        for i in range(NLUT)
+    ],
+    dtype=np.uint8,
+)
+
 
 def colors_from_temp(temps):
-    idx = ((np.log(np.clip(temps, T_MIN, T_MAX)) - _LOG_MIN) * _LUT_SCALE).astype(np.int32)
+    idx = ((np.log(np.clip(temps, T_MIN, T_MAX)) - _LOG_MIN) * _LUT_SCALE).astype(
+        np.int32
+    )
     np.clip(idx, 0, NLUT - 1, out=idx)
     return COLOR_LUT[idx]
 
+
 # ---------- deterministic infinite starfield (fully vectorised, hash-based) ----------
 _CHOICES = np.array([1, 1, 1, 2, 2, 3], dtype=np.int32)
+
 
 def _rand01(CX, CY, salt):
     k = CX.astype(np.uint64) * np.uint64(73856093)
     k = k ^ (CY.astype(np.uint64) * np.uint64(19349663))
     k = k ^ (np.uint64(salt) * np.uint64(2654435761))
-    k = k ^ (k >> np.uint64(33)); k = k * np.uint64(0xff51afd7ed558ccd)
-    k = k ^ (k >> np.uint64(33)); k = k * np.uint64(0xc4ceb9fe1a85ec53)
+    k = k ^ (k >> np.uint64(33))
+    k = k * np.uint64(0xFF51AFD7ED558CCD)
+    k = k ^ (k >> np.uint64(33))
+    k = k * np.uint64(0xC4CEB9FE1A85EC53)
     k = k ^ (k >> np.uint64(33))
     return (k >> np.uint64(11)).astype(np.float64) * (1.0 / 9007199254740992.0)
+
 
 def visible_stars(center, gamma, vel_dir, zoom):
     R = 0.5 * math.hypot(WIDTH, HEIGHT) * GEN_MARGIN / zoom
@@ -83,7 +104,8 @@ def visible_stars(center, gamma, vel_dir, zoom):
     ncells = (2 * half_w / CELL_SIZE + 1) * (2 * half_h / CELL_SIZE + 1)
     if ncells > MAX_CELLS:
         s = math.sqrt(MAX_CELLS / ncells)
-        half_w *= s; half_h *= s
+        half_w *= s
+        half_h *= s
     cx0 = math.floor((center.real - half_w) / CELL_SIZE)
     cx1 = math.floor((center.real + half_w) / CELL_SIZE)
     cy0 = math.floor((center.imag - half_h) / CELL_SIZE)
@@ -93,18 +115,23 @@ def visible_stars(center, gamma, vel_dir, zoom):
     if cxs.size == 0 or cys.size == 0:
         return (np.empty(0, np.complex128), np.empty(0), np.empty(0, np.int32))
     CX, CY = np.meshgrid(cxs, cys)
-    CX = CX.ravel(); CY = CY.ravel(); n = CX.size
+    CX = CX.ravel()
+    CY = CY.ravel()
+    n = CX.size
     pos = np.empty(n * STARS_PER_CELL, np.complex128)
     temp = np.empty(n * STARS_PER_CELL, np.float64)
     size = np.empty(n * STARS_PER_CELL, np.int32)
     for i in range(STARS_PER_CELL):
-        rx = _rand01(CX, CY, 100 + i); ry = _rand01(CX, CY, 200 + i)
-        rt = _rand01(CX, CY, 300 + i); rs = _rand01(CX, CY, 400 + i)
+        rx = _rand01(CX, CY, 100 + i)
+        ry = _rand01(CX, CY, 200 + i)
+        rt = _rand01(CX, CY, 300 + i)
+        rs = _rand01(CX, CY, 400 + i)
         sl = slice(i * n, (i + 1) * n)
         pos[sl] = (CX + rx) * CELL_SIZE + 1j * ((CY + ry) * CELL_SIZE)
-        temp[sl] = 1500 + 30000 * rt ** 3
+        temp[sl] = 1500 + 30000 * rt**3
         size[sl] = _CHOICES[np.clip((rs * 6).astype(np.int32), 0, 5)]
     return pos, temp, size
+
 
 # ============================================================
 #  THIS IS THE ONLY PART YOU IMPLEMENT
@@ -125,7 +152,7 @@ class Observer:
     @property
     def velocity(self):
         m = abs(self.momentum)
-        return self.momentum / math.sqrt(1 + m ** 2)
+        return self.momentum / math.sqrt(1 + m**2)
 
     @property
     def velocity_dir(self):
@@ -134,7 +161,7 @@ class Observer:
     @property
     def gamma(self):
         v = abs(self.velocity)
-        return 1 / math.sqrt(1 - v ** 2)
+        return 1 / math.sqrt(1 - v**2)
 
     def rotate(self, d_angle):
         self.angle += d_angle
@@ -143,7 +170,11 @@ class Observer:
         self.momentum += force * np.exp(1j * self.angle) * DTAU
 
     def slowdown(self, force):
-        dm = force * self.momentum / abs(self.momentum) * DTAU if self.momentum != 0 else 0
+        dm = (
+            force * self.momentum / abs(self.momentum) * DTAU
+            if self.momentum != 0
+            else 0
+        )
         if abs(dm) > abs(self.momentum):
             self.momentum = 0 + 0j
         else:
@@ -164,7 +195,9 @@ class Observer:
                 else:
                     self.warp = 2
             case 2:
-                ang = np.angle((self.target_pos - self.cords) * np.exp(1j * self.angle).conjugate())
+                ang = np.angle(
+                    (self.target_pos - self.cords) * np.exp(1j * self.angle).conjugate()
+                )
                 if np.abs(ang) > 0.1:
                     self.rotate(ROTATE_SPEED * np.sign(ang))
                 else:
@@ -222,7 +255,10 @@ class Observer:
     def target(self, pos):
         self.target_pos = pos
         self.warp = 1
+
+
 # ============================================================
+
 
 def main():
     global WIDTH, HEIGHT
@@ -261,10 +297,14 @@ def main():
                     if fullscreen:
                         info = pygame.display.Info()
                         WIDTH, HEIGHT = info.current_w, info.current_h
-                        screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+                        screen = pygame.display.set_mode(
+                            (WIDTH, HEIGHT), pygame.FULLSCREEN
+                        )
                     else:
                         WIDTH, HEIGHT = windowed_size
-                        screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
+                        screen = pygame.display.set_mode(
+                            (WIDTH, HEIGHT), pygame.RESIZABLE
+                        )
                     center = complex(WIDTH // 2, HEIGHT // 2)
                 elif event.key == pygame.K_ESCAPE and fullscreen:
                     fullscreen = False
@@ -283,14 +323,19 @@ def main():
                 else:
                     selected_world = None
             elif event.type == pygame.MOUSEWHEEL:
-                zoom = max(0.05, min(20.0, zoom * (1.1 ** event.y)))
+                zoom = max(0.05, min(20.0, zoom * (1.1**event.y)))
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_a]: ship.rotate(-ROTATE_SPEED)
-        if keys[pygame.K_d]: ship.rotate(ROTATE_SPEED)
-        if keys[pygame.K_w]: ship.speedup(ENGINE_ACCEL)
-        if keys[pygame.K_s]: ship.speedup(-ENGINE_ACCEL)
-        if keys[pygame.K_q]: ship.slowdown(ENGINE_ACCEL)
+        if keys[pygame.K_a]:
+            ship.rotate(-ROTATE_SPEED)
+        if keys[pygame.K_d]:
+            ship.rotate(ROTATE_SPEED)
+        if keys[pygame.K_w]:
+            ship.speedup(ENGINE_ACCEL)
+        if keys[pygame.K_s]:
+            ship.speedup(-ENGINE_ACCEL)
+        if keys[pygame.K_q]:
+            ship.slowdown(ENGINE_ACCEL)
 
         ship.update()
 
@@ -341,25 +386,40 @@ def main():
             if 0 <= hx < WIDTH and 0 <= hy < HEIGHT:
                 pygame.draw.circle(screen, (255, 255, 80), (int(hx), int(hy)), 8, 2)
 
-        pygame.draw.polygon(screen, SHIP_COLOR, [
-            (int(center.real), int(center.imag) - 14),
-            (int(center.real) - 9, int(center.imag) + 10),
-            (int(center.real) + 9, int(center.imag) + 10),
-        ])
+        pygame.draw.polygon(
+            screen,
+            SHIP_COLOR,
+            [
+                (int(center.real), int(center.imag) - 14),
+                (int(center.real) - 9, int(center.imag) + 10),
+                (int(center.real) + 9, int(center.imag) + 10),
+            ],
+        )
 
         p_mag = abs(ship.momentum)
         beta = p_mag / math.sqrt(1 + p_mag * p_mag)
         b = min(beta, 0.999999)
         gamma = 1.0 / math.sqrt(1 - b * b)
         mode_label = "OKNO - co oko vidi" if ship.view_mode == 0 else "MAPA - kde to je"
-        hud = f"{beta*100:6.2f} % c   gamma = {gamma:5.2f}   [MEZERNIK] {mode_label}   [F] cela obrazovka"
+        hud = f"{beta * 100:6.2f} % c   gamma = {gamma:5.2f}   [MEZERNIK] {mode_label}   [F] cela obrazovka"
         screen.blit(font.render(hud, True, (200, 200, 210)), (12, 10))
-        screen.blit(font.render(f"svet (venku):   {fmt_time(ship.time)}", True, (150, 210, 150)), (12, 34))
-        screen.blit(font.render(f"lod (tvuj cas): {fmt_time(ship.proper_time)}", True, (210, 190, 120)), (12, 56))
+        screen.blit(
+            font.render(
+                f"svet (venku):   {fmt_time(ship.time)}", True, (150, 210, 150)
+            ),
+            (12, 34),
+        )
+        screen.blit(
+            font.render(
+                f"lod (tvuj cas): {fmt_time(ship.proper_time)}", True, (210, 190, 120)
+            ),
+            (12, 56),
+        )
 
         pygame.display.flip()
         clock.tick(60)
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()

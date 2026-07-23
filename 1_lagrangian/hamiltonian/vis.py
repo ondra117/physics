@@ -3,16 +3,16 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from thr import Thr
 
-m  = np.array([1.0, 1.0, 1.0])
-x  = np.array([-0.97000436,  0.97000436, 0.0])
-y  = np.array([ 0.24308753, -0.24308753, 0.0])
+m = np.array([1.0, 1.0, 1.0])
+x = np.array([-0.97000436, 0.97000436, 0.0])
+y = np.array([0.24308753, -0.24308753, 0.0])
 vx = np.array([-0.46620368, -0.46620368, 0.93240737])
 vy = np.array([-0.43236573, -0.43236573, 0.86473146])
 vx[2] *= 1.15
 vy[2] *= 1.15
 vx -= vx.mean()
 vy -= vy.mean()
-p  = (vx + 1j*vy) * m
+p = (vx + 1j * vy) * m
 
 thr = Thr(m, x, y, p)
 
@@ -23,14 +23,12 @@ trail_len = 300
 fig, ax = plt.subplots(figsize=(6, 6))
 ax.set_xlim(-2, 2)
 ax.set_ylim(-2, 2)
-ax.set_aspect('equal')
-ax.axis('off')
+ax.set_aspect("equal")
+ax.axis("off")
 
-bodies, = ax.plot([], [], "o", ms=8)
-trails = [
-    ax.plot([], [], lw=1, alpha=0.6)[0]
-    for _ in range(len(m))
-]
+(bodies,) = ax.plot([], [], "o", ms=8)
+trails = [ax.plot([], [], lw=1, alpha=0.6)[0] for _ in range(len(m))]
+
 
 def states():
     v = thr.get_v()
@@ -56,6 +54,7 @@ def states():
 
         yield x, y, tx, ty
 
+
 def update(frame):
     x, y, tx, ty = frame
 
@@ -65,6 +64,7 @@ def update(frame):
         trails[i].set_data(tx[i], ty[i])
 
     return (bodies, *trails)
+
 
 ani = FuncAnimation(
     fig,
